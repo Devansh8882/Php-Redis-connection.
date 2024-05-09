@@ -14,99 +14,62 @@
     <form method="POST" id="form" action="">
         <div>
             <h1 class="se"> Student Enquiry</h1>
-           
-            Enter Id : <input type="number" placeholder="+ve integer" min=0 max=100 name="id" required>
-            <!-- Enter Name : <input type="text" placeholder="John" maxlength="20"  name="name"  pattern="[a-z][A-Z]{2,10}"> 
-           
-            <br> Enter Cast : <input type="text" placeholder="Mishra" name="cast"   pattern="[a-z][A-Z]{2,10}" >
-            Enter DOB :  <input type="date" name="dob" >
-           
-            <br> Enter Class : <input type="number" placeholder="Class Division" min=1 max=12 name="class" >
-            Enter Marks :  <input type="number" placeholder="Total Marks Obtained" min=0 max=500 name="marks" >
-         <br> Gender:
-        <input type="radio" name="gender" value="female">Female
-        <input type="radio" name="gender" value="male" >Male
-        <br> -->
 
-            <button class ="home-btn">SEARCH</button>
-          
-            &emsp;  &emsp; <a href="1home.php"> <input type="button" value="HOME PAGE" class ="home-btn"> </a>
+            Enter Id : <input type="number" placeholder="+ve integer" min=0 max=100 name="enter_id">
+            Enter Name : <input type="text" placeholder="John" maxlength="20" name="name" pattern="[a-z,A-Z]{3,10}">
+
+            <br> Enter Cast : <input type="text" placeholder="Mishra" name="cast" pattern="[a-z,A-Z]{3,10}">
+            Enter DOB : <input type="date" name="dob">
+
+            <br> Enter Class : <input type="number" placeholder="Class Division" min=1 max=12 name="class">
+            Enter Marks : <br> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 
+            Minimum <input type="number" placeholder="Min Range" min=0 max=100 name="min">
+            Maximim<input type="number" placeholder="Max Range " min=0 max=100 name="max">
+            <br> Gender:
+            <input type="radio" name="gender" value="female">Female
+            <input type="radio" name="gender" value="male">Male
+            <br>
+
+            <button class="home-btn">SEARCH</button>
+
+            &emsp; &emsp; <a href="1home.php"> <input type="button" value="HOME PAGE" class="home-btn"> </a>
 
     </form>
-    <br> <br> <?php
+    <br> <br>
 
-    // echo"welcome to the page "; 
-    
+
+    <?php
+
     $redis = new Redis();
     $redis->connect('127.0.0.1', 6379);
 
 
-    $id = $_POST["id"];
+    $id = $_POST["enter_id"];
     $name = $_POST["name"];
     $cast = $_POST["cast"];
     $dob = $_POST["dob"];
     $class = $_POST["class"];
-    $marks = $_POST["marks"];
+    $min = $_POST["min"];
+    $max = $_POST["max"];
     $gender = $_POST["gender"];
 
+    // Redis key....
+    $redis_id_key_set = "st:$id";
  
+    $field = $redis->HMGET($redis_id_key_set, array("Name", "cast", "cls", "DOB", "TM", "Gender"));
 
-    //  echo "student:$id_num ";
+    //array of redis keys...
     
-    $field = $redis->HMGET("st:$id", array("Name", "cast", "cls", "DOB", "TM", "Gender"));
+    $total=$redis->keys('*');  //array
 
-    //  print_r($field);
+    $count = count($total);
+
+    // check for each field 
     
 
-
-
-    if (!$id) {
-
-        // echo"<br>Please enter ID before searching";
+    if ($id == "" && $name == "" && $cast == "" && $dob == "" && $class == "" && $min == "" && $max=="" && $gender == "") {
+        echo "case 1 fulfilled ";
         echo "<br><table border='1' style =' background-color: black;'>
-     <caption>Student Info</caption>
-     <tr>
-         <th>ID</th>
-         <th>Name</th>           
-         <th>Cast</th>
-         <th>Class</th>
-         <th>Date Of Birth</th>
-         <th>Total Marks</th>
-         <th>Gender</th>
-
-     </tr>
-
-     <tr>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     </tr>";
-
-
-        //  die();
-    } elseif ($redis->EXISTS("st:$id") == 0) {
-        echo "<br>WRONG ID...! <br> Check data and enter correct ID";
-        echo "<table border='1' style =' background-color: black;'>
-        <caption>Student Info</caption>
-        <tr>
-        <th>ID</th>
-        <th>Name</th>           
-            <th>Cast</th>
-            <th>Class</th>
-            <th>Date Of Birth</th>
-            <th>Total Marks</th>
-            <th>Gender</th>
-   
-        </tr>";
-
-
-        // die();
-    } else {
-        echo "<table id='table' border='1' >
         <caption>Student Info</caption>
         <tr>
             <th>ID</th>
@@ -116,126 +79,102 @@
             <th>Date Of Birth</th>
             <th>Total Marks</th>
             <th>Gender</th>
-            
+        
         </tr>
         
         <tr>
-            <td>$id</td>";
-
-
-        foreach ($field as $value) {
-            # code...
-            echo "<td> $value </td>";
-        }
-
-        echo "</tr>
-           
-           </table>";
-    }
-
-    ?>
-    </div>
-
-
-
-</body>
-
-</html>
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="demo2.css" rel="stylesheet">
-</head>
-
-<body style="background-color: white; color: lightcyan;">
-
-
-    <form method="POST" id="form" action="">
-        <div>
-            <h1 class="se"> Student Enquiry</h1>
-            Enter Id : <input type="text" id="t1" placeholder="Enter Id " name="st">
-
-            <button class ="home-btn">SEARCH</button>
-          
-            &emsp;  &emsp; <a href="1home.php"> <input type="button" value="HOME PAGE" class ="home-btn"> </a>
-
-    </form>
-    <br> <br> <?php
-
-    // echo"welcome to the page "; 
-    
-    $redis = new Redis();
-    $redis->connect('127.0.0.1', 6379);
-
-
-    $id_num = $_POST["st"];
-
-    //  echo "student:$id_num ";
-    
-    $field = $redis->HMGET("st:$id_num", array("Name", "cast", "Cls", "DOB", "TM", "Gender"));
-
-    //  print_r($field);
-    
-
-
-
-    if (!$id_num) {
-
-        // echo"<br>Please enter ID before searching";
-        echo "<br><table border='1' style =' background-color: black;'>
-     <caption>Student Info</caption>
-     <tr>
-         <th>ID</th>
-         <th>Name</th>           
-         <th>Cast</th>
-         <th>Class</th>
-         <th>Date Of Birth</th>
-         <th>Total Marks</th>
-         <th>Gender</th>
-
-     </tr>
-
-     <tr>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     <td>NULL</td>
-     </tr>";
-
-
-        //  die();
-    } elseif ($redis->EXISTS("st:$id_num") == 0) {
-        echo "<br>WRONG ID...! <br> Check data and enter correct ID";
-        echo "<table border='1' style =' background-color: black;'>
-        <caption>Student Info</caption>
-        <tr>
-        <th>ID</th>
-        <th>Name</th>           
-            <th>Cast</th>
-            <th>Class</th>
-            <th>Date Of Birth</th>
-            <th>Total Marks</th>
-            <th>Gender</th>
-   
+        <td>NULL</td>
+        <td>NULL</td>
+        <td>NULL</td>
+        <td>NULL</td>
+        <td>NULL</td>
+        <td>NULL</td>
+        <td>NULL</td>
         </tr>";
 
+    } elseif ($id != "" || $name != "" || $cast != "" || $dob != "" || $class != "" || $min != "" || $max != "" || $gender != "") {
 
-        // die();
-    } else {
-        echo "<table id='table' border='1' >
-        <caption>Student Info</caption>
-        <tr>
+
+        if ($redis->EXISTS($redis_id_key_set) == 1) {
+
+            echo "ID_match_case";
+            $redis_hash_data = $redis->HGETALL($redis_id_key_set);
+
+
+            echo "<table id='table' border='1' >
+            <caption>Student Info</caption>
+              <tr>
+              <th>ID</th>
+              <th>Name</th>           
+              <th>Cast</th>
+              <th>Class</th>
+              <th>Date Of Birth</th>
+              <th>Total Marks</th>
+             <th>Gender</th>
+             
+             </tr>";
+         
+            if (  ($name == "" || $name == $redis_hash_data['Name']) &&
+                ($cast == "" || $cast == $redis_hash_data['cast']) &&
+                ($dob == "" || $dob == $redis_hash_data['DOB']) &&
+                ($class == "" || $class == $redis_hash_data['cls']) &&
+                ($min == "" || $min <= $redis_hash_data['TM']) &&
+                ($max == "" || $max >= $redis_hash_data['TM']) &&
+                ($gender == "" || $gender == $redis_hash_data['Gender'])) 
+            {
+                echo " _other data is either empty or matches the data in redis  ";
+
+
+
+                // echo "third loop";
+                // echo "-------end--------- ";
+    
+        
+                echo" <tr>
+                    <td>$id</td>";
+
+                foreach ($field as $value) {
+                    # code...
+                    echo "<td> $value </td>";
+                }
+
+                echo "</tr>
+                    
+                    </table>";
+
+            } else {
+                echo "<script>alert('Data Not Found')
+                    </script>
+
+                    <tr>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    <td>NULL</td>
+                    </tr>
+                    </table>";
+
+                    }
+
+            
+    
+            
+            
+        } elseif($id == "" || $id ==0) {
+            
+            echo "id not set case ";
+            
+            echo"$count";
+
+            // $id=1;
+            // echo "st:$id";
+            
+            echo "<table id='table' border='1' >
+            <caption>Student Info</caption>
+            <tr>
             <th>ID</th>
             <th>Name</th>           
             <th>Cast</th>
@@ -244,38 +183,108 @@
             <th>Total Marks</th>
             <th>Gender</th>
             
-        </tr>
-        
-        <tr>
-            <td>$id_num</td>";
+            </tr>";
 
+            
+            
+            if($count !=0 ){
+                for($id = 1; $redis->EXISTS("st:$id") == 1 ; $id++)
+            
+                {    
+                    $redis_hash_data = $redis->HGETALL("st:$id");
+                    
+                                    
+                                    
+                    if(($name == "" || $name == $redis_hash_data['Name']) &&
+                    ($cast == "" || $cast == $redis_hash_data['cast']) &&
+                    ($dob == "" || $dob == $redis_hash_data['DOB']) &&
+                    ($class == "" || $class == $redis_hash_data['cls']) &&
+                    ($min == "" || $min <= $redis_hash_data['TM']) &&
+                    ($max == "" || $max >= $redis_hash_data['TM']) &&
+                    ($gender == "" || $gender == $redis_hash_data['Gender']))
+                    {  
+                        // $count--;
+    
+                        $field = $redis->HMGET("st:$id", array("Name", "cast", "cls", "DOB", "TM", "Gender"));
+    
+                        
+                        
+                        echo" <tr>
+                        <td>$id</td>";
+                        
+                        foreach ($field as $value) {
+                            # code...
+                            echo "<td> $value </td>";
+                        }
+                        
+                        echo "</tr>";
+                        
+                        
+                        
+                    }
+    
+                
+                    else{
+                        $count--;
+                    
+                        if($count==0){
+                            echo "<script>alert('Data Not Found')
+                            </script>
 
-        foreach ($field as $value) {
-            # code...
-            echo "<td> $value </td>";
-        }
+                            <tr>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            <td>NULL</td>
+                            </tr>";
 
-        echo "</tr>
+                        }
+                    
+                    }
+                    // else {
+                    //     // echo "<script>alert('Data Not Found')
+                    //     // </script>";
+                        
+                    // }
+                    
+                    
+    
+                }
+                
+                echo "</table>";
+                
+
+            }
+            else {
+                // echo "<script>alert('Data Not Found')
+                // </script>";
+
+                echo "new condition arrived...";
+                
+            }
+
            
-           </table>";
+            
+            
+            // var_dump($test);
+            // echo "else when id is not given".$test;
+
+        }else {
+            echo "<script>alert('Data Not Found')
+            </script>";
+        }
     }
 
     ?>
+
+
+
     </div>
-
-
-
+    
 </body>
 
 </html>
- -->
 
-
-
-
-
-
-
-<!-- <div id="tf">
-    Student details :<br> <textarea name="textfield" id="detail" cols="30" rows="10"></textarea>
-    </div> -->
