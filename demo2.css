@@ -1,0 +1,32 @@
+#table{
+    /* position :absolute; */
+    background-color: black;
+    align-content:end;
+
+
+
+}
+#form{
+    background-color:darkslategray;
+    margin: 90px;
+    position:absolute;
+    padding: 2em;
+    opacity: 0.7;
+    /* align-items: center; */
+    margin-left:17.5em;
+
+
+}
+
+.home-btn{
+
+    padding: 3px;
+    margin: 5px;
+    
+    border-radius: 5px;
+}
+
+
+/* h1{
+    text-align:
+} */
