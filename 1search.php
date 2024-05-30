@@ -26,11 +26,12 @@
              Enter DOB : <input type="date" name="dob" id="dob" max="<?php echo date("Y-m-d"); ?>">
             
           <br> <br> 
-          Gender:  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;&emsp; &emsp; Enter Marks :
-           <br>&emsp; &emsp;  
+          Gender :-  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp;&emsp; &emsp;
+           Enter Marks :-
+           <br>&emsp; &emsp; 
             <input type="radio" name="gender" value="female">Female
            <input type="radio" name="gender" value="male">Male
-           &emsp;  &emsp; &emsp;  &emsp; &emsp;&emsp;   
+           &emsp;  &emsp; &emsp;  &emsp; &emsp; &emsp;  
             Minimum <input type="number" placeholder="Min Range" min=0 max=100 name="min">
             Maximim<input type="number" placeholder="Max Range " min=0 max=100 name="max">
             <br>
